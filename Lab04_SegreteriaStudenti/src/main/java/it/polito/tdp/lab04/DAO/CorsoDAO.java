@@ -37,7 +37,10 @@ public class CorsoDAO {
 				System.out.println(codins + " " + numeroCrediti + " " + nome + " " + periodoDidattico);
 
 				// Crea un nuovo JAVA Bean Corso
+				Corso corso = new Corso(codins, numeroCrediti, nome, periodoDidattico);
+				
 				// Aggiungi il nuovo oggetto Corso alla lista corsi
+				corsi.add(corso);
 			}
 
 			conn.close();
@@ -55,15 +58,67 @@ public class CorsoDAO {
 	/*
 	 * Dato un codice insegnamento, ottengo il corso
 	 */
-	public void getCorso(Corso corso) {
-		// TODO
+	public Corso getCorso(String codins) {
+		
+		final String sql = "SELECT * FROM corso WHERE codins = ?";
+		
+		Corso corso = null;
+		
+		try {
+			Connection conn = ConnectDB.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setString(1, codins);
+			ResultSet rs = st.executeQuery();
+			
+			while (rs.next()) {
+
+				String codins1 = rs.getString("codins");
+				int numeroCrediti = rs.getInt("crediti");
+				String nome = rs.getString("nome");
+				int periodoDidattico = rs.getInt("pd");
+				System.out.println(codins1 + " " + numeroCrediti + " " + nome + " " + periodoDidattico);
+				corso = new Corso(codins, numeroCrediti, nome, periodoDidattico);
+			}
+			
+			conn.close();
+			return corso;
+		}catch (SQLException e) {
+			// e.printStackTrace();
+			throw new RuntimeException("Errore Db", e);
+		}
 	}
 
 	/*
 	 * Ottengo tutti gli studenti iscritti al Corso
 	 */
-	public void getStudentiIscrittiAlCorso(Corso corso) {
-		// TODO
+	public List<Studente> getStudentiIscrittiAlCorso(Corso corso) {
+		
+		final String sql = "SELECT * FROM studente WHERE matricola IN (SELECT matricola FROM iscrizione WHERE codins = ?)";
+		
+		List<Studente> studentiCorso = new LinkedList<>();
+		
+		try {
+			Connection conn = ConnectDB.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setString(1, corso.getCodins());
+			ResultSet rs = st.executeQuery();
+			
+			while(rs.next()) {
+				String matricola = rs.getString("matricola");
+				String cognome = rs.getString("cognome");
+				String nome = rs.getString("nome");
+				String CDS = rs.getString("CDS");
+				System.out.println(matricola + " " + cognome + " " + nome + " " + CDS);
+				Studente studente = new Studente(matricola, cognome, nome, CDS);
+				studentiCorso.add(studente);
+			}
+			
+			conn.close();
+			return studentiCorso;
+		}catch (SQLException e) {
+			// e.printStackTrace();
+			throw new RuntimeException("Errore Db", e);
+		}
 	}
 
 	/*

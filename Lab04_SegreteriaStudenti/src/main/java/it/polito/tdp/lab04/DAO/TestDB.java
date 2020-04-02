@@ -26,6 +26,9 @@ public class TestDB {
 		System.out.println("Studente cercato:" + sdao.getStudente("161245") + "\n\n\n\n");
 		System.out.println("Elenco corsi frequentati dallo studente " + studente1.toString() + ":\n" + sdao.getCorsiStudente(studente1));
 		
+		Corso corso2 = cdao.getCorso("09AQGPG");
+		Studente studente2 = sdao.getStudente("161245");
+		System.out.println(cdao.iscriviStudenteAlCorso(studente2, corso2));
 	}
 
 }

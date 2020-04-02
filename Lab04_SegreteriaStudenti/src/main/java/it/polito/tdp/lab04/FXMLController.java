@@ -80,16 +80,24 @@ public class FXMLController {
     @FXML
     void cercaIscritti(ActionEvent event) {
     	String string = "";
+    	String matricola = txtMatricola.getText().trim();
     	
     	if(corso==null)
     		string = "DEVI SELEZIONARE UN CORSO";
-    	else
-    		for(Studente s : model.getStudentiPerCorso(corso))
-    			string += s.toString() + "\n";
-    	
+    	else if(matricola.equals(""))
+    		for(Studente s : model.getStudentiPerCorso(corso)) 
+    				string += s.toString() + "\n";
+    	else {
+    		Studente studente = model.getStudente(matricola);
+    		if(studente==null)
+    			string = "MATRICOLA NON ESISTENTE";
+    		else if(model.getStudentiPerCorso(corso).contains(studente))
+    			string = "STUDENTE ISCRITTO AL CORSO";
+    		else
+    			string = "STUDENTE NON ISCRITTO AL CORSO";
+    	}
     	if(corso!=null && string.equals(""))
     		string = "NESSUNO STUDENTE ISCRITTO";
-    	
     	txtResult.setText(string);
     }
 
@@ -109,12 +117,34 @@ public class FXMLController {
 
     @FXML
     void doIscrivi(ActionEvent event) {
-
+    	String matricola = txtMatricola.getText().trim();
+    	Studente studente = model.getStudente(matricola);
+    	String string = null;
+    	
+    	if(matricola.equals(""))
+    		string = "DEVI INSERIRE UNA MATRICOLA";
+    	else if(studente==null)
+    		string = "MATRICOLA NON ESISTENTE";
+    	else if(corso==null)
+    		string = "DEVI SELEZIONARE UN CORSO";
+    	else if(model.getStudentiPerCorso(corso).contains(studente))
+    		string = "STUDENTE GIA' ISCRITTO AL CORSO";
+		else {
+    		boolean iscrizione = model.iscriviStudenteAlCorso(studente, corso);
+    		if(iscrizione = true)
+    			string = "ISCRIZIONE AVVENUTA";
+		}
+    	
+    	txtResult.setText(string);
     }
 
     @FXML
     void doReset(ActionEvent event) {
-
+    	txtResult.clear();
+    	txtMatricola.clear();
+    	txtNome.clear();
+    	txtCognome.clear();
+    	boxCorsi.setValue(null);
     }
 
     @FXML

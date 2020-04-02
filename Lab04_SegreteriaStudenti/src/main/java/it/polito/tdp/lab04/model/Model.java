@@ -32,4 +32,9 @@ public class Model {
 	public List<Corso> getCorsiStudente(Studente studente){
 		return studenteDAO.getCorsiStudente(studente);
 	}
+
+	public boolean iscriviStudenteAlCorso(Studente studente, Corso corso) {
+		boolean iscrizione = corsoDAO.iscriviStudenteAlCorso(studente, corso);
+		return iscrizione;
+	}
 }

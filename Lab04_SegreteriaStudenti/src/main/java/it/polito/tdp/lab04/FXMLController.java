@@ -74,7 +74,7 @@ public class FXMLController {
     			string = "MATRICOLA NON ESISTENTE";
     	}
     	
-    	txtResult.setText(string);
+    	txtResult.setText(String.format("%-8s", string));
     }
 
     @FXML

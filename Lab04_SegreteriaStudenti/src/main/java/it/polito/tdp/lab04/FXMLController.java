@@ -53,6 +53,11 @@ public class FXMLController {
 
     @FXML
     private Button btnReset;
+    
+    
+    //PER STAMPARE IL TESTO CORRETTAMENTE (OVVERO FACENDO IN MODO CHE OGNI COLONNA OCCUPI LO STESSO SPAZIO 
+    //A PRESCINDERE DALLA LUNGHEZZA DELL'ATTRIBUTO) SI USA IL METODO
+    //String.format("%-NUMCARATTERIDAONNUPAREs", stringa da stamapare)
 
     @FXML
     void cercaCorsi(ActionEvent event) {
